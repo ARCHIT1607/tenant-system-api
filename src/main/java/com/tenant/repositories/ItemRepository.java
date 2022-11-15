@@ -1,0 +1,22 @@
+package com.tenant.repositories;
+
+import java.sql.Date;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.tenant.entity.Item;
+
+public interface ItemRepository extends JpaRepository<Item, Long> {
+
+	@Query("SELECT u FROM Item u WHERE u.userName = ?1 Order By u.id")
+	public List<Item> getItemListByUserName(String UserName);
+
+	@Query("SELECT u FROM Item u WHERE u.id = ?1 Order By u.id")
+	public Item getItemById(Long id);
+	
+	@Query("SELECT u FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2")
+	public List<Item> filterItem(Date from, Date to);
+
+}
