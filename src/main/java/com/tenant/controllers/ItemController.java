@@ -1,14 +1,13 @@
 package com.tenant.controllers;
 
 import java.sql.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,7 @@ import com.tenant.entity.Item;
 import com.tenant.repositories.ItemRepository;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ItemController {
 
 	@Autowired
@@ -40,20 +39,38 @@ public class ItemController {
 	}
 
 	@GetMapping("/filterItem")
-	public List<Item> filterItem(@RequestParam(name = "fromDate") String fromDate, @RequestParam(name="toDate") String toDate) throws ParseException {
+	public List<Item> filterItem(@RequestParam(name = "fromDate") String fromDate,
+			@RequestParam(name = "toDate") String toDate) throws ParseException {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
-        java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
-        java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
-        java.sql.Date from = new java.sql.Date(fromStartDate.getTime());
-        java.sql.Date to = new java.sql.Date(toEndDate.getTime());
-        System.out.println("fromDate "+from + " toDate "+to);
-        List<Item> result = itemRepo.filterItem(from,to);
-        for(Item i : result) {
-        	System.out.println(i.getItemName());
-        }
+		java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
+		java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
+		java.sql.Date from = new java.sql.Date(fromStartDate.getTime());
+		java.sql.Date to = new java.sql.Date(toEndDate.getTime());
+		System.out.println("fromDate " + from + " toDate " + to);
+		List<Item> result = itemRepo.filterItem(from, to);
+		for (Item i : result) {
+			System.out.println(i.getItemName());
+		}
 		return result;
 	}
+
+	@GetMapping("/filterDashboard")
+	public Map filterDashboard(@RequestParam(name = "fromDate") String fromDate,
+			@RequestParam(name = "toDate") String toDate,@RequestParam(name = "userName") String userName ) throws ParseException {
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
+		java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
+		java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
+		java.sql.Date from = new java.sql.Date(fromStartDate.getTime());
+		java.sql.Date to = new java.sql.Date(toEndDate.getTime());
+		System.out.println("fromDate " + from + " toDate " + to);
+		return itemRepo.filterDashboard(from, to,userName);
+	}
 	
+	@GetMapping("/dashboard")
+	public Map dashboard(@RequestParam(name = "userName") String userName ) throws ParseException {
+		return itemRepo.dashboard(userName);
+	}
+
 	@GetMapping("/getItemById/{id}")
 	public Optional<Item> getItemById(@PathVariable("id") int id) {
 		return itemRepo.findById((long) id);
@@ -77,5 +94,4 @@ public class ItemController {
 		System.out.println("Item Deleted");
 	}
 
-	
 }

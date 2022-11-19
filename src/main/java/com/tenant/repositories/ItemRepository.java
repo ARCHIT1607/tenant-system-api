@@ -1,7 +1,9 @@
 package com.tenant.repositories;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +20,12 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	
 	@Query("SELECT u FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2")
 	public List<Item> filterItem(Date from, Date to);
+	
+	@Query("SELECT COUNT(u.itemName) as itemCount, SUM(u.price) as expense FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2 AND u.userName=?3")
+	public Map filterDashboard(Date from, Date to,String userName);
+	
+	@Query("SELECT COUNT(u.itemName) as itemCount, SUM(u.price) as expense FROM Item u WHERE u.userName=?1")
+	public Map dashboard(String userName);
+
 
 }
