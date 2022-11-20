@@ -18,14 +18,20 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	@Query("SELECT u FROM Item u WHERE u.id = ?1 Order By u.id")
 	public Item getItemById(Long id);
 	
-	@Query("SELECT u FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2")
-	public List<Item> filterItem(Date from, Date to);
+	@Query("SELECT u FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2 AND u.userName=?3")
+	public List<Item> filterItem(Date from, Date to, String userName);
 	
 	@Query("SELECT COUNT(u.itemName) as itemCount, SUM(u.price) as expense FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2 AND u.userName=?3")
 	public Map filterDashboard(Date from, Date to,String userName);
 	
 	@Query("SELECT COUNT(u.itemName) as itemCount, SUM(u.price) as expense FROM Item u WHERE u.userName=?1")
 	public Map dashboard(String userName);
+	
+	@Query("SELECT u FROM Item u WHERE u.userName=?1")
+	public List<Item> downloadReportNoFilter(String userName);
+	
+	@Query("SELECT u FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2 AND u.userName=?3")
+	public List<Item> downloadReportFilter(Date from, Date to,String userName);
 
 
 }

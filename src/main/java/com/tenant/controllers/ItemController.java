@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,31 +29,43 @@ public class ItemController {
 	private ItemRepository itemRepo;
 
 	@GetMapping("/getAllItems/{userName}")
-	public List<Item> getItemListByUserName(@PathVariable("userName") String userName) {
-		return itemRepo.getItemListByUserName(userName);
+	public ResponseEntity<Object> getItemListByUserName(@PathVariable("userName") String userName) {
+		try {
+			return new ResponseEntity<Object>(itemRepo.getItemListByUserName(userName),HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@PostMapping("/addItem")
-	public Item getItemListByUserName(@RequestBody Item item) {
-		System.out.println(item.getItemName());
-		item.setCreatedDate(new Date(System.currentTimeMillis()));
-		return itemRepo.save(item);
+	public ResponseEntity<Object>addItem(@RequestBody Item item) {
+		try {
+			System.out.println(item.getItemName());
+			item.setCreatedDate(new Date(System.currentTimeMillis()));
+			return new ResponseEntity<Object>(itemRepo.save(item),HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/filterItem")
-	public List<Item> filterItem(@RequestParam(name = "fromDate") String fromDate,
-			@RequestParam(name = "toDate") String toDate) throws ParseException {
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
-		java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
-		java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
-		java.sql.Date from = new java.sql.Date(fromStartDate.getTime());
-		java.sql.Date to = new java.sql.Date(toEndDate.getTime());
-		System.out.println("fromDate " + from + " toDate " + to);
-		List<Item> result = itemRepo.filterItem(from, to);
-		for (Item i : result) {
-			System.out.println(i.getItemName());
+	public ResponseEntity<Object> filterItem(@RequestParam(name = "fromDate") String fromDate,
+			@RequestParam(name = "toDate") String toDate, @RequestParam(name = "userName") String userName) throws ParseException {
+		try {
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
+			java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
+			java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
+			java.sql.Date from = new java.sql.Date(fromStartDate.getTime());
+			java.sql.Date to = new java.sql.Date(toEndDate.getTime());
+			System.out.println("fromDate " + from + " toDate " + to);
+			List<Item> result = itemRepo.filterItem(from, to,userName);
+			for (Item i : result) {
+				System.out.println(i.getItemName());
+			}
+			return new ResponseEntity<Object>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		return result;
 	}
 
 	@GetMapping("/filterDashboard")
