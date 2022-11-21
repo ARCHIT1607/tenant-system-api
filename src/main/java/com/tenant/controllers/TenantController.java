@@ -46,7 +46,7 @@ public class TenantController {
 	public ResponseEntity<Object> register(@RequestBody Tenant tenant) {
 		Tenant user = tenantRepo.getUserDetails(tenant.getUsername());
 		try {
-			if (user.getUsername().toUpperCase().equals(tenant.getUsername().toUpperCase())) {
+			if (user!=null && user.getUsername().toUpperCase().equals(tenant.getUsername().toUpperCase())) {
 				throw new Exception("user already exists");
 			}
 			tenant.setPassword(passwordEncode.encode(tenant.getPassword()));
