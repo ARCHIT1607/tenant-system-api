@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tenant.entity.Tenant;
+import com.tenant.mapper.TenantMapper;
 import com.tenant.repositories.TenantRepository;
 
 @RestController
@@ -24,11 +25,13 @@ public class TenantController {
 	@Autowired
 	BCryptPasswordEncoder passwordEncode;
 	
+	@Autowired
+	private TenantMapper mapper;
 
 	@PostMapping("/login")
 	public ResponseEntity<String> getUserDetails(@RequestParam(name = "userName") String userName,
 			@RequestParam(name = "password") String password) {
-		Tenant user = tenantRepo.getUserDetails(userName);
+		Tenant user = mapper.getUserDetails(userName);
 		try {
 			if (user == null) {
 				throw new Exception("User doesn't Exist");
@@ -44,7 +47,7 @@ public class TenantController {
 
 	@PostMapping("/register")
 	public ResponseEntity<Object> register(@RequestBody Tenant tenant) {
-		Tenant user = tenantRepo.getUserDetails(tenant.getUsername());
+		Tenant user = mapper.getUserDetails(tenant.getUsername());
 		try {
 			if (user!=null && user.getUsername().toUpperCase().equals(tenant.getUsername().toUpperCase())) {
 				throw new Exception("user already exists");

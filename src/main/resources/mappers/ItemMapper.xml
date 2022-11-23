@@ -1,0 +1,71 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tenant.mapper.ItemMapper">
+
+	<resultMap id="ItemResultMap" type="com.tenant.entity.Item">
+		<id column="id" property="id" />
+		<result column="item_name" property="itemName" />
+		<result column="shop_name" property="shopName" />
+		<result column="price" property="price" />
+		<result column="quantity" property="quantity" />
+		<result column="user_name" property="userName" />
+		<result column="created_date" property="createdDate" />
+	</resultMap>
+
+	<select id="getItemListByUserName" parameterType="String"
+		resultMap="ItemResultMap">
+		select * from Item where user_name =#{UserName} ORDER BY ID
+	</select>
+
+	<select id="getItemById" parameterType="Long"
+		resultMap="ItemResultMap">
+		select * from Item where ID =#{id} ORDER BY ID
+	</select>
+
+	<select id="filterItem " parameterType="map"
+		resultMap="ItemResultMap">
+		SELECT * FROM Item WHERE created_date BETWEEN #{from} AND
+		#{to} AND
+		user_name =#{userName} AND item_name=#{itemName}
+	</select>
+
+	<select id="filterDashboard " parameterType="map"
+		resultType="map">
+		SELECT
+		COUNT(item_name) as itemCount, SUM(price) as expense
+		FROM Item
+		WHERE u.created_date BETWEEN =#{from} AND #{to} AND user_name
+		=#{userName}
+	</select>
+
+	<select id="dashboard " parameterType="String" resultType="map">
+		SELECT COUNT(item_name) as itemCount, SUM(price) as expense FROM Item
+		WHERE user_name =#{userName}
+	</select>
+
+	<select id="downloadReportNoFilter " parameterType="String"
+		resultMap="ItemResultMap">>
+		SELECT * FROM Item WHERE user_name =#{userName}
+	</select>
+
+	<select id="downloadReportFilter " parameterType="map"
+		resultMap="ItemResultMap">>
+		SELECT * FROM Item WHERE created_date BETWEEN #{from} AND
+		#{to} AND user_name =#{userName}
+	</select>
+	
+	<select id="getAllItemName " parameterType="map"
+		resultType="string">>
+		SELECT DISTINCT UPPER(item_name) FROM Item WHERE user_name =#{userName}
+	</select>
+	
+	<select id="getAllShopName " parameterType="map"
+		resultType="string">>
+		SELECT DISTINCT UPPER(shop_name) FROM Item WHERE user_name =#{userName}
+	</select>
+
+
+
+</mapper>

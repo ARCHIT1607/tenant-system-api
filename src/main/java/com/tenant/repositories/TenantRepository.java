@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.tenant.entity.Tenant;
 
-@Component
+//@Component
 public interface TenantRepository extends JpaRepository<Tenant, Long>{
 	
 	@Query("SELECT u FROM Tenant u WHERE u.username = ?1")
