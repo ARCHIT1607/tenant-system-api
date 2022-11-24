@@ -1,7 +1,9 @@
 package com.tenant.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -15,7 +17,8 @@ import lombok.NoArgsConstructor;
 public class Tenant {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="TENANT_SEQ")
+	@Column(name="ID")
 	private long id;
 	
 	private String username;

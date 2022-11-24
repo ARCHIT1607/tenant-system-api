@@ -3,14 +3,13 @@ package com.tenant.controllers;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,15 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tenant.entity.Item;
 import com.tenant.mapper.ItemMapper;
-import com.tenant.repositories.ItemRepository;
 
 @RestController
+@Transactional
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ItemController {
 
-	@Autowired
-	private ItemRepository itemRepo;
-	
 	@Autowired
 	private ItemMapper mapper;
 
@@ -65,7 +61,9 @@ public class ItemController {
 		try {
 			System.out.println(item.getItemName());
 			item.setCreatedDate(new Date(System.currentTimeMillis()));
-			return new ResponseEntity<Object>(itemRepo.save(item), HttpStatus.OK);
+			item.setUpdatedDate(null);
+			mapper.addItem(item);
+			return new ResponseEntity<Object>("added successfully", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
@@ -74,7 +72,7 @@ public class ItemController {
 	@GetMapping("/filterItem")
 	public ResponseEntity<Object> filterItem(@RequestParam(name = "fromDate") String fromDate,
 			@RequestParam(name = "toDate") String toDate, @RequestParam(name = "userName") String userName,
-			@RequestParam(name = "itemName") String itemName)
+	@RequestParam(name = "itemName") String itemName)
 			throws ParseException {
 		try {
 			java.sql.Date from = null;
@@ -87,7 +85,7 @@ public class ItemController {
 				to = new java.sql.Date(toEndDate.getTime());
 				System.out.println("fromDate " + from + " toDate " + to);
 			}
-			List<Item> result = mapper.filterItem(from, to, userName, itemName);
+			List<Item> result = mapper.filterItem(from, to, userName,itemName);
 			for (Item i : result) {
 				System.out.println(i.getItemName());
 			}
@@ -117,25 +115,29 @@ public class ItemController {
 	}
 
 	@GetMapping("/getItemById/{id}")
-	public Optional<Item> getItemById(@PathVariable("id") int id) {
-		return itemRepo.findById((long) id);
+	public Item getItemById(@PathVariable("id") int id) {
+		return mapper.getItemById((long) id);
 	}
 
 	@PostMapping("/updateItem")
-	public Item udpateItem(@RequestBody Item item) {
+	public String udpateItem(@RequestBody Item item) throws ParseException {
 		System.out.println(item.getItemName());
-		Item oldItem = itemRepo.getItemById(item.getId());
+		Item oldItem = mapper.getItemById(item.getId());
 		oldItem.setItemName(item.getItemName());
 		oldItem.setPrice(item.getPrice());
 		oldItem.setQuantity(item.getQuantity());
 		oldItem.setShopName(item.getShopName());
-		return itemRepo.save(oldItem);
+		oldItem.setShopName(item.getShopName());
+		
+		oldItem.setUpdatedDate(new Date(System.currentTimeMillis()));
+		mapper.updateItem(oldItem);
+		return "Successfully Updated";
 	}
 
 	@DeleteMapping("/deleteItem/{id}")
 	public void getItemById(@PathVariable("id") long id) {
 
-		itemRepo.deleteById(id);
+		mapper.deleteById(id);
 		System.out.println("Item Deleted");
 	}
 

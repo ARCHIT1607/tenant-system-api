@@ -13,15 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tenant.entity.Tenant;
 import com.tenant.mapper.TenantMapper;
-import com.tenant.repositories.TenantRepository;
 
 @RestController
 @CrossOrigin("*")
 public class TenantController {
 
-	@Autowired
-	private TenantRepository tenantRepo;
-	
 	@Autowired
 	BCryptPasswordEncoder passwordEncode;
 	
@@ -53,7 +49,7 @@ public class TenantController {
 				throw new Exception("user already exists");
 			}
 			tenant.setPassword(passwordEncode.encode(tenant.getPassword()));
-			return new ResponseEntity<Object>(tenantRepo.save(tenant), HttpStatus.OK);
+			return new ResponseEntity<Object>(mapper.register(tenant), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

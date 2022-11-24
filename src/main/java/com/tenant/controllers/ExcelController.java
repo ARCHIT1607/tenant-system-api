@@ -83,36 +83,38 @@ public class ExcelController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
+
 	@GetMapping("/download")
-	  public ResponseEntity<Resource> getFile(@RequestParam(name = "fromDate") String fromDate,
-				@RequestParam(name = "toDate") String toDate,@RequestParam(name = "userName") String userName) {
-	    String filename = "Report.xlsx";
-	    try {
-	    	if(!fromDate.equals("null") && !toDate.equals("null") ){
-	    		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
+	public ResponseEntity<Resource> getFile(@RequestParam(name = "fromDate") String fromDate,
+			@RequestParam(name = "toDate") String toDate, @RequestParam(name = "userName") String userName,
+			@RequestParam(name = "itemName") String itemName) {
+		String filename = "Report.xlsx";
+		InputStreamResource file = null;
+		try {
+			java.sql.Date from = null;
+			java.sql.Date to = null;
+			if (!fromDate.equals("null") && !toDate.equals("null")) {
+				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
 				java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
 				java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
-				java.sql.Date from = new java.sql.Date(fromStartDate.getTime());
-				java.sql.Date to = new java.sql.Date(toEndDate.getTime());
+				from = new java.sql.Date(fromStartDate.getTime());
+				to = new java.sql.Date(toEndDate.getTime());
 				System.out.println("fromDate " + from + " toDate " + to);
-		    	InputStreamResource file = new InputStreamResource(fileService.load(from,to,userName));
-
-			    return ResponseEntity.ok()
-			        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-			        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
-			        .body(file);
-	    	}else {
-		    	InputStreamResource file = new InputStreamResource(fileService.load(null,null,userName));
-
-			    return ResponseEntity.ok()
-			        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-			        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
-			        .body(file);
-	    	}
+			}
+			file = new InputStreamResource(fileService.load(from, to, userName, itemName));
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
+//	    	else {
+//		    	InputStreamResource file = new InputStreamResource(fileService.load(null,null,userName));
+//
+//			    return ResponseEntity.ok()
+//			        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+//			        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+//			        .body(file);
+//	    	}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-	  }
+	}
 }

@@ -5,6 +5,7 @@ import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,7 +14,8 @@ import javax.persistence.Table;
 public class Item {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="ITEM_SEQ")
+	@Column(name="ID")
 	private long id;
 	
 	@Column(name = "item_name")
@@ -29,6 +31,9 @@ public class Item {
 
 	@Column(name = "created_date",columnDefinition = "DATE DEFAULT CURRENT_DATE")
 	private Date createdDate;
+	
+	@Column(name = "updated_date",columnDefinition = "DATE DEFAULT CURRENT_DATE")
+	private Date updatedDate;
 
 	public long getId() {
 		return id;
@@ -73,7 +78,16 @@ public class Item {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	public Item(long id, String itemName, int quantity, double price, String shopName, String userName) {
+	
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+	
+	public Item(long id, String itemName, int quantity, double price, String shopName, String userName,
+			Date createdDate, Date updatedDate) {
 		super();
 		this.id = id;
 		this.itemName = itemName;
@@ -81,6 +95,8 @@ public class Item {
 		this.price = price;
 		this.shopName = shopName;
 		this.userName = userName;
+		this.createdDate = createdDate;
+		this.updatedDate = updatedDate;
 	}
 	public Item() {
 		super();

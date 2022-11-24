@@ -1,0 +1,110 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tenant.mapper.ItemMapper">
+
+	<resultMap id="ItemResultMap" type="Item">
+		<id column="id" property="id" />
+		<result column="item_name" property="itemName" />
+		<result column="shop_name" property="shopName" />
+		<result column="price" property="price" />
+		<result column="quantity" property="quantity" />
+		<result column="user_name" property="userName" />
+		<result column="created_date" property="createdDate" />
+	</resultMap>
+
+	<select id="getItemListByUserName" parameterType="String"
+		resultMap="ItemResultMap">
+		select * from Item where user_name =#{UserName} ORDER BY ID
+	</select>
+
+	<select id="getItemById" parameterType="Long"
+		resultMap="ItemResultMap">
+		select * from Item where ID =#{id} ORDER BY ID
+	</select>
+
+	<select id="filterItem" parameterType="map"
+		resultMap="ItemResultMap">
+		SELECT * FROM Item WHERE 1=1
+		<if test="from!=null and to!=null"> AND created_date BETWEEN #{from} AND
+			#{to}
+		</if>
+		<if test="userName!=null">AND user_name=#{userName}</if>
+		<if test="itemName!=''">AND UPPER(item_name)=UPPER(#{itemName})</if>
+	</select>
+
+	<select id="filterDashboard" parameterType="map"
+		resultType="map">
+		SELECT
+		COUNT(item_name) as itemCount, SUM(price) as expense
+		FROM Item
+		WHERE created_date IN (#{from}, #{to}) AND user_name
+		=#{userName}
+	</select>
+
+	<select id="dashboard" parameterType="java.lang.String"
+		resultType="HashMap">
+		SELECT COUNT(item_name) as itemCount, SUM(price) as expense
+		FROM Item
+		WHERE user_name =#{userName}
+	</select>
+
+	<select id="downloadReportNoFilter" parameterType="String"
+		resultMap="ItemResultMap">
+		SELECT * FROM Item WHERE user_name =#{userName}
+	</select>
+
+	<select id="downloadReportFilter" parameterType="map"
+		resultMap="ItemResultMap">
+		SELECT * FROM Item WHERE 1=1
+		<if test="from!=null and to!=null"> AND created_date BETWEEN #{from} AND
+			#{to}
+		</if>
+		<if test="userName!=null">AND user_name=#{userName}</if>
+		<if test="itemName!=''">AND UPPER(item_name)=UPPER(#{itemName})</if>
+	</select>
+
+	<select id="getAllItemName" parameterType="map"
+		resultType="string">>
+		SELECT DISTINCT UPPER(item_name) FROM Item WHERE user_name
+		=#{userName}
+	</select>
+
+	<select id="getAllShopName" parameterType="map"
+		resultType="string">>
+		SELECT DISTINCT UPPER(shop_name) FROM Item WHERE user_name
+		=#{userName}
+	</select>
+
+	<insert id="addItem" parameterType="Item">
+		<selectKey keyProperty="id" resultType="Long" order="BEFORE">
+			select
+			nextval('ITEM_SEQ')
+		</selectKey>
+		INSERT INTO
+		Item(id,item_name,quantity,price,shop_name,user_name,created_date,updated_date)
+		VALUES(#{id},
+		#{itemName},#{quantity},#{price},#{shopName},#{userName},#{createdDate},#{updatedDate})
+	</insert>
+
+	<update id="updateItem" parameterType="Item">
+		UPDATE
+		Item SET
+		<if test="itemName!=null">item_name=#{itemName},</if>
+		<if test="quantity!=null">quantity=#{quantity},</if>
+		<if test="price!=null">price=#{price},</if>
+		<if test="shopName!=null">shop_name=#{shopName},</if>
+		<if test="userName!=null">user_name=#{userName}</if>
+		, updated_date=#{updatedDate}
+		WHERE id=#{id}
+	</update>
+
+	<delete id="deleteById" parameterType="Long">
+		DELETE FROM Item
+		WHERE id
+		=#{id}
+	</delete>
+
+
+</mapper>

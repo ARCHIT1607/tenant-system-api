@@ -3,12 +3,16 @@ package com.tenant.mapper;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.util.MultiValueMap;
 
 import com.tenant.entity.Item;
 
+@Mapper
 public interface ItemMapper {
 
 //	@Query("SELECT u FROM Item u WHERE u.userName = ?1 Order By u.id")
@@ -31,11 +35,20 @@ public interface ItemMapper {
 	public List<Item> downloadReportNoFilter(String userName);
 
 //	@Query("SELECT u FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2 AND u.userName=?3")
-	public List<Item> downloadReportFilter(@Param("from") Date from, @Param("to") Date to, @Param("userName") String userName);
+	public List<Item> downloadReportFilter(@Param("from") Date from, @Param("to") Date to, @Param("userName") String userName,
+			@Param("itemName") String itemName);
 
-	@Query("SELECT DISTINCT UPPER(u.itemName) FROM Item u WHERE u.userName = ?1")
+//	@Query("SELECT DISTINCT UPPER(u.itemName) FROM Item u WHERE u.userName = ?1")
 	public List<String> getAllItemName(String userName);
 
-	@Query("SELECT DISTINCT UPPER(u.shopName) FROM Item u WHERE u.userName = ?1")
+//	@Query("SELECT DISTINCT UPPER(u.shopName) FROM Item u WHERE u.userName = ?1")
 	public List<String> getAllShopName(String userName);
+
+	public Item getItemById(long id);
+
+	public void updateItem(Item oldItem);
+
+	public void addItem(Item item);
+
+	public void deleteById(long id);
 }

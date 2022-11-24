@@ -12,12 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tenant.entity.Item;
 import com.tenant.helper.ExcelHelper;
+import com.tenant.mapper.ItemMapper;
 import com.tenant.repositories.ItemRepository;
 
 @Service
 public class ExcelService {
 	@Autowired
 	ItemRepository repository;
+	
+	@Autowired
+	ItemMapper mapper;
 
 	public void save(MultipartFile file, String userName) throws ParseException {
 		try {
@@ -32,11 +36,9 @@ public class ExcelService {
 		return repository.findAll();
 	}
 
-	public ByteArrayInputStream load(Date fromDate, Date toDate, String userName) {
-		if (fromDate != null && toDate != null) {
-			System.out.println("inside filter");
-			System.out.println("userName "+userName);
-			List<Item> items = repository.downloadReportFilter(fromDate, toDate, userName);
+	public ByteArrayInputStream load(Date fromDate, Date toDate, String userName, String itemName) {
+		ByteArrayInputStream in = null;
+			List<Item> items = mapper.downloadReportFilter(fromDate, toDate, userName, itemName);
 			for(Item item : items) {
 				System.out.println(item.getItemName());
 				System.out.println(item.getShopName());
@@ -44,14 +46,14 @@ public class ExcelService {
 				System.out.println(item.getQuantity());
 				System.out.println(item.getCreatedDate());
 			}
-			ByteArrayInputStream in = ExcelHelper.itemsToExcel(items);
-			return in;
-		} else {
-			System.out.println("inside non filter");
-			List<Item> items = repository.downloadReportNoFilter(userName);
-			ByteArrayInputStream in = ExcelHelper.itemsToExcel(items);
-		    return in;
-		}
+			in = ExcelHelper.itemsToExcel(items);
+		return in;
+//		} else {
+//			System.out.println("inside non filter");
+//			List<Item> items = mapper.downloadReportNoFilter(userName);
+//			ByteArrayInputStream in = ExcelHelper.itemsToExcel(items);
+//		    return in;
+//		}
 //	    List<Item> items = repository.findAll();
 
 	}
