@@ -36,18 +36,20 @@
 
 	<select id="filterDashboard" parameterType="map"
 		resultType="map">
-		SELECT
-		COUNT(item_name) as itemCount, SUM(price) as expense
+		SELECT COUNT(item_name) as itemCount, SUM(price) as expense
 		FROM Item
-		WHERE created_date IN (#{from}, #{to}) AND user_name
-		=#{userName}
+		WHERE 1=1
+		<if test="from!=null and to!=null"> AND created_date BETWEEN #{from} AND
+			#{to}
+		</if>
+		<if test="userName!=null">AND user_name=#{userName}</if>
 	</select>
 
 	<select id="dashboard" parameterType="java.lang.String"
 		resultType="HashMap">
 		SELECT COUNT(item_name) as itemCount, SUM(price) as expense
 		FROM Item
-		WHERE user_name =#{userName}
+		WHERE 1=1 AND user_name=#{userName}
 	</select>
 
 	<select id="downloadReportNoFilter" parameterType="String"

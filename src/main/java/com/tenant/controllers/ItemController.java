@@ -72,12 +72,11 @@ public class ItemController {
 	@GetMapping("/filterItem")
 	public ResponseEntity<Object> filterItem(@RequestParam(name = "fromDate") String fromDate,
 			@RequestParam(name = "toDate") String toDate, @RequestParam(name = "userName") String userName,
-	@RequestParam(name = "itemName") String itemName)
-			throws ParseException {
+			@RequestParam(name = "itemName") String itemName) throws ParseException {
 		try {
 			java.sql.Date from = null;
 			java.sql.Date to = null;
-			if (!fromDate.equals("null") && !toDate.equals("null")) {
+			if (!fromDate.equals("") && !toDate.equals("")) {
 				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
 				java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
 				java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
@@ -85,7 +84,7 @@ public class ItemController {
 				to = new java.sql.Date(toEndDate.getTime());
 				System.out.println("fromDate " + from + " toDate " + to);
 			}
-			List<Item> result = mapper.filterItem(from, to, userName,itemName);
+			List<Item> result = mapper.filterItem(from, to, userName, itemName);
 			for (Item i : result) {
 				System.out.println(i.getItemName());
 			}
@@ -100,12 +99,17 @@ public class ItemController {
 	public Map filterDashboard(@RequestParam(name = "fromDate") String fromDate,
 			@RequestParam(name = "toDate") String toDate, @RequestParam(name = "userName") String userName)
 			throws ParseException {
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
-		java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
-		java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
-		java.sql.Date from = new java.sql.Date(fromStartDate.getTime());
-		java.sql.Date to = new java.sql.Date(toEndDate.getTime());
-		System.out.println("fromDate " + from + " toDate " + to);
+		java.sql.Date from = null;
+		java.sql.Date to = null;
+
+		if (!fromDate.equals("") && !toDate.equals("")) {
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
+			java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
+			java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
+			from = new java.sql.Date(fromStartDate.getTime());
+			to = new java.sql.Date(toEndDate.getTime());
+			System.out.println("fromDate " + from + " toDate " + to);
+		}
 		return mapper.filterDashboard(from, to, userName);
 	}
 
@@ -128,7 +132,7 @@ public class ItemController {
 		oldItem.setQuantity(item.getQuantity());
 		oldItem.setShopName(item.getShopName());
 		oldItem.setShopName(item.getShopName());
-		
+
 		oldItem.setUpdatedDate(new Date(System.currentTimeMillis()));
 		mapper.updateItem(oldItem);
 		return "Successfully Updated";
