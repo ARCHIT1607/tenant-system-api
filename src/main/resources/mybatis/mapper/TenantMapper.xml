@@ -20,7 +20,7 @@
 			select nextval('TENANT_SEQ')
 		</selectKey>
 		INSERT INTO
-		Student(id,username,password) VALUES(#{id},
+		tenant (id,username,password) VALUES(#{id},
 		#{username},#{password})
 	</insert>
 </mapper>
