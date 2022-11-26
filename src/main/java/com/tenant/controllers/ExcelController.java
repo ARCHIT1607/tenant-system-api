@@ -91,17 +91,7 @@ public class ExcelController {
 		String filename = "Report.xlsx";
 		InputStreamResource file = null;
 		try {
-			java.sql.Date from = null;
-			java.sql.Date to = null;
-			if (!fromDate.equals("null") && !toDate.equals("null")) {
-				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd"); // New Pattern
-				java.util.Date fromStartDate = sdf1.parse(fromDate); // Returns a Date format object with the pattern
-				java.util.Date toEndDate = sdf1.parse(toDate); // Returns a Date format object with the pattern
-				from = new java.sql.Date(fromStartDate.getTime());
-				to = new java.sql.Date(toEndDate.getTime());
-				System.out.println("fromDate " + from + " toDate " + to);
-			}
-			file = new InputStreamResource(fileService.load(from, to, userName, itemName));
+			file = new InputStreamResource(fileService.load(fromDate, toDate, userName, itemName));
 			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 //	    	else {

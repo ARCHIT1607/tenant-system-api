@@ -27,7 +27,7 @@
 	<select id="filterItem" parameterType="map"
 		resultMap="ItemResultMap">
 		SELECT * FROM Item WHERE 1=1
-		<if test="from!=null and to!=null"> AND created_date BETWEEN #{from} AND
+		<if test="from!='' and to!=''"> AND created_date BETWEEN #{from} AND
 			#{to}
 		</if>
 		<if test="userName!=null">AND user_name=#{userName}</if>
@@ -39,7 +39,7 @@
 		SELECT COUNT(item_name) as itemCount, SUM(price) as expense
 		FROM Item
 		WHERE 1=1
-		<if test="from!=null and to!=null"> AND created_date BETWEEN #{from} AND
+		<if test="from!='' and to!=''"> AND created_date BETWEEN #{from} AND
 			#{to}
 		</if>
 		<if test="userName!=null">AND user_name=#{userName}</if>
@@ -60,7 +60,7 @@
 	<select id="downloadReportFilter" parameterType="map"
 		resultMap="ItemResultMap">
 		SELECT * FROM Item WHERE 1=1
-		<if test="from!=null and to!=null"> AND created_date BETWEEN #{from} AND
+		<if test="from!='' and to!=''"> AND created_date BETWEEN #{from} AND
 			#{to}
 		</if>
 		<if test="userName!=null">AND user_name=#{userName}</if>
@@ -68,14 +68,14 @@
 	</select>
 
 	<select id="getAllItemName" parameterType="map"
-		resultType="string">>
-		SELECT DISTINCT UPPER(item_name) FROM Item WHERE user_name
+		resultType="HashMap">
+		SELECT DISTINCT item_name AS itemName FROM Item WHERE user_name
 		=#{userName}
 	</select>
 
 	<select id="getAllShopName" parameterType="map"
 		resultType="string">>
-		SELECT DISTINCT UPPER(shop_name) FROM Item WHERE user_name
+		SELECT DISTINCT shop_name FROM Item WHERE user_name
 		=#{userName}
 	</select>
 

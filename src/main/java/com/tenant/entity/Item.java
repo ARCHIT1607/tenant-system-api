@@ -1,6 +1,6 @@
 package com.tenant.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,11 +29,11 @@ public class Item {
 	@Column(name = "user_name")
 	private String userName;
 
-	@Column(name = "created_date",columnDefinition = "DATE DEFAULT CURRENT_DATE")
-	private Date createdDate;
+	@Column(name = "created_date")
+	private String createdDate;
 	
-	@Column(name = "updated_date",columnDefinition = "DATE DEFAULT CURRENT_DATE")
-	private Date updatedDate;
+	@Column(name = "updated_date")
+	private String updatedDate;
 
 	public long getId() {
 		return id;
@@ -72,22 +72,22 @@ public class Item {
 		this.userName = userName;
 	}
 	
-	public Date getCreatedDate() {
+	public String getCreatedDate() {
 		return createdDate;
 	}
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(String createdDate) {
 		this.createdDate = createdDate;
 	}
 	
-	public Date getUpdatedDate() {
+	public String getUpdatedDate() {
 		return updatedDate;
 	}
-	public void setUpdatedDate(Date updatedDate) {
+	public void setUpdatedDate(String updatedDate) {
 		this.updatedDate = updatedDate;
 	}
 	
 	public Item(long id, String itemName, int quantity, double price, String shopName, String userName,
-			Date createdDate, Date updatedDate) {
+			String createdDate, String updatedDate) {
 		super();
 		this.id = id;
 		this.itemName = itemName;

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -82,11 +84,7 @@ public class ExcelHelper {
 						break;
 
 					case 4:
-						SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy"); // New Pattern
-						java.util.Date fromStartDate = sdf1.parse(currentCell.toString()); // Returns a Date format
-																							// object with the pattern
-						java.sql.Date from = new java.sql.Date(fromStartDate.getTime());
-						item.setCreatedDate(from);
+						item.setCreatedDate(currentCell.getStringCellValue());
 						break;
 
 					default:
