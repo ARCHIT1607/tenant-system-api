@@ -23,7 +23,7 @@ import com.tenant.entity.Item;
 
 public class ExcelHelper {
 	public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-	static String[] HEADERs = { "Item Name", "Shop Name", "Price", "Quantity", "Created Date"};
+	static String[] HEADERs = { "Item Name", "Shop Name", "Price", "Quantity", "Created Date" };
 	static String SHEET = "Items";
 
 	public static boolean hasExcelFormat(MultipartFile file) {
@@ -62,18 +62,31 @@ public class ExcelHelper {
 				while (cellsInRow.hasNext()) {
 					Cell currentCell = cellsInRow.next();
 					System.out.println("test " + currentCell);
+					if (currentCell==null) {
+						System.out.println("inside null");
+						continue;
+					}
+					System.out.println("passed");
 					switch (cellIdx) {
 //					case 0:
 //						item.setId((long) currentCell.getNumericCellValue());
 //						break;
 
 					case 0:
-						item.setItemName(currentCell.getStringCellValue());
-						break;
+						if (currentCell.getStringCellValue().equals("") || currentCell.getStringCellValue() == null) {
+							continue;
+						} else {
+							item.setItemName(currentCell.getStringCellValue());
+							break;
+						}
 
 					case 1:
-						item.setShopName(currentCell.getStringCellValue());
-						break;
+						if (currentCell.getStringCellValue().equals("") || currentCell.getStringCellValue() == null) {
+							continue;
+						} else {
+							item.setShopName(currentCell.getStringCellValue());
+							break;
+						}
 
 					case 2:
 						item.setPrice((double) currentCell.getNumericCellValue());
