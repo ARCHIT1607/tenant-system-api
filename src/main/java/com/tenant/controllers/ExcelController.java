@@ -87,11 +87,11 @@ public class ExcelController {
 	@GetMapping("/download")
 	public ResponseEntity<Resource> getFile(@RequestParam(name = "fromDate") String fromDate,
 			@RequestParam(name = "toDate") String toDate, @RequestParam(name = "userName") String userName,
-			@RequestParam(name = "itemName") String itemName) {
+			@RequestParam(name = "itemName") String itemName,@RequestParam(name = "shopName") String shopName) {
 		String filename = "Report.xlsx";
 		InputStreamResource file = null;
 		try {
-			file = new InputStreamResource(fileService.load(fromDate, toDate, userName, itemName));
+			file = new InputStreamResource(fileService.load(fromDate, toDate, userName, itemName, shopName));
 			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
 					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
 //	    	else {

@@ -21,7 +21,7 @@ public interface ItemMapper {
 
 //	@Query("SELECT u FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2 AND u.userName=?3 AND itemName=?4")
 	public List<Item> filterItem(@Param("from") String fromDate, @Param("to") String toDate, @Param("userName") String userName,
-			@Param("itemName") String itemName);
+			@Param("itemName") String itemName, @Param("shopName") String shopName);
 
 //	@Query("SELECT COUNT(u.itemName) as itemCount, SUM(u.price) as expense FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2 AND u.userName=?3")
 	public Map filterDashboard(@Param("from") LocalDate from, @Param("to") LocalDate to, @Param("userName") String userName);
@@ -34,7 +34,7 @@ public interface ItemMapper {
 
 //	@Query("SELECT u FROM Item u WHERE u.createdDate BETWEEN ?1 AND ?2 AND u.userName=?3")
 	public List<Item> downloadReportFilter(@Param("from") String fromDate, @Param("to") String toDate, @Param("userName") String userName,
-			@Param("itemName") String itemName);
+			@Param("itemName") String itemName, @Param("shopName") String shopName);
 
 //	@Query("SELECT DISTINCT UPPER(u.itemName) FROM Item u WHERE u.userName = ?1")
 	public List<String> getAllItemName(String userName);

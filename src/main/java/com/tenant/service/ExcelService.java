@@ -36,9 +36,9 @@ public class ExcelService {
 		return repository.findAll();
 	}
 
-	public ByteArrayInputStream load(String fromDate, String toDate, String userName, String itemName) {
+	public ByteArrayInputStream load(String fromDate, String toDate, String userName, String itemName, String shopName) {
 		ByteArrayInputStream in = null;
-			List<Item> items = mapper.downloadReportFilter(fromDate, toDate, userName, itemName);
+			List<Item> items = mapper.downloadReportFilter(fromDate, toDate, userName, itemName, shopName);
 			System.out.println("item size "+items.size());
 			for(Item item : items) {
 				System.out.println(item.getItemName());

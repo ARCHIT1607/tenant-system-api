@@ -32,6 +32,7 @@
 		</if>
 		<if test="userName!=null">AND user_name=#{userName}</if>
 		<if test="itemName!=''">AND UPPER(item_name)=UPPER(#{itemName})</if>
+		<if test="shopName!=''">AND UPPER(shop_name)=UPPER(#{shopName})</if>
 	</select>
 
 	<select id="filterDashboard" parameterType="map"
@@ -65,6 +66,7 @@
 		</if>
 		<if test="userName!=null">AND user_name=#{userName}</if>
 		<if test="itemName!=''">AND UPPER(item_name)=UPPER(#{itemName})</if>
+		<if test="shopName!=''">AND UPPER(shop_name)=UPPER(#{shopName})</if>
 	</select>
 
 	<select id="getAllItemName" parameterType="map"
@@ -74,8 +76,8 @@
 	</select>
 
 	<select id="getAllShopName" parameterType="map"
-		resultType="string">>
-		SELECT DISTINCT shop_name FROM Item WHERE user_name
+		resultType="HashMap">
+		SELECT DISTINCT shop_name as shopName FROM Item WHERE user_name
 		=#{userName}
 	</select>
 

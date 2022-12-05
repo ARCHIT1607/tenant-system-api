@@ -75,9 +75,10 @@ public class ItemController {
 	@GetMapping("/filterItem")
 	public ResponseEntity<Object> filterItem(@RequestParam(name = "fromDate") String fromDate,
 			@RequestParam(name = "toDate") String toDate, @RequestParam(name = "userName") String userName,
-			@RequestParam(name = "itemName") String itemName) throws ParseException {
+			@RequestParam(name = "itemName") String itemName, @RequestParam(name = "shopName") String shopName)
+			throws ParseException {
 		try {
-			List<Item> result = mapper.filterItem(fromDate, toDate, userName, itemName);
+			List<Item> result = mapper.filterItem(fromDate, toDate, userName, itemName, shopName);
 			for (Item i : result) {
 				System.out.println(i.getItemName());
 			}
