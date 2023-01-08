@@ -26,7 +26,8 @@ function Register() {
     <>
       <Container id="RegisterContainer">
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <h2 className="mb-3 ">Register</h2>
+          <h2 className="mb-5 ">Register</h2>
+          {/* First Row */}
           <Row className="g-2 mb-3">
             <Col md>
               <FloatingLabel
@@ -37,7 +38,7 @@ function Register() {
                   type="email"
                   required
                   placeholder="name@example.com"
-                  style={{ width: "30rem" }}
+                  style={{ width: "30rem"}}
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
@@ -61,31 +62,77 @@ function Register() {
               </FloatingLabel>
             </Col>
           </Row>
-
+          {/* Second Row */}
           <Row className="mb-3">
-            <Col md>
-              <FloatingLabel controlId="floatingTextarea2" label="Address">
+            <Col xs="auto">
+            <FloatingLabel
+                controlId="floatingInputGrid"
+                label="Flat No / Bld name"
+              >
                 <Form.Control
-                  as="textarea"
                   required
-                  placeholder="Address"
-                  min={10}
-                  style={{ height: "100px", width: "100%" }}
+                  type="text"
+                  placeholder="Flat No & Bld Name"
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
-                  please enter address
+                  not valid
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </Col>
+            <Col xs="auto">
+              <FloatingLabel
+                controlId="floatingInputGrid"
+                label="Street Name"
+              >
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Street Name"
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  invalid input
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </Col>
+            <Col xs="auto">
+              <FloatingLabel
+                controlId="floatingInputGrid"
+                label="City"
+              >
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="City"
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  invalid input
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </Col>
+            <Col xs="auto">
+              <FloatingLabel
+                controlId="floatingInputGrid"
+                label="Postcode"
+              >
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Postcode"
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  invalid Postcode
                 </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
           </Row>
-
+          {/* Third Row  */}
           <Row className="g-3 mb-3">
             <Col md>
-              <FloatingLabel
-                controlId="floatingSelect"
-                label="Works with selects"
-              >
+              <FloatingLabel controlId="floatingSelect" label="Property type">
                 <Form.Select
                   aria-label="Floating label select example"
                   style={{ width: "20rem" }}
